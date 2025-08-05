@@ -1,0 +1,6 @@
+# dict_int extension
+comment = 'hooks for use with DCSim'
+default_version = '1.0'
+module_pathname = '$libdir/dcsim'
+relocatable = true
+trusted = true
