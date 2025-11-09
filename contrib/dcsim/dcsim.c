@@ -1,5 +1,6 @@
 #include "postgres.h"
 #include "commands/defrem.h"
+#include <stdio.h>
 
 PG_MODULE_MAGIC;
 
@@ -9,7 +10,6 @@ PG_FUNCTION_INFO_V1(dcsim_end_simulation);
 // Global ROI start and end
 static inline void DCSimStartGlobalROI()
 {
-    // printf("DCSimHooks: Starting Global Region of Interest\n");
     // Create a multi byte NOP with a special operand: FEED BEEF
     __asm__ __volatile__
     (
@@ -22,7 +22,6 @@ static inline void DCSimStartGlobalROI()
 
 static inline void DCSimEndGlobalROI()
 {
-    // printf("DCSimHooks: Ending Global Region of Interest\n");
     // Create a multi byte NOP with a special operand: DEAD BEEF
     __asm__ __volatile__
     (
@@ -35,14 +34,14 @@ static inline void DCSimEndGlobalROI()
 
 Datum
 dcsim_start_simulation(PG_FUNCTION_ARGS) {
+    elog(NOTICE, "DCSim: Starting simulation");
     DCSimStartGlobalROI();
-    elog(LOG, "START SIMULATION HOOK ACTIVATED");
     PG_RETURN_VOID();
 }
 
 Datum
 dcsim_end_simulation(PG_FUNCTION_ARGS) {
+    elog(NOTICE, "DCSim: Ending simulation");
 	DCSimEndGlobalROI();
-    elog(LOG, "END SIMULATION HOOK ACTIVATED");
     PG_RETURN_VOID();
 }
